@@ -1,6 +1,6 @@
 const login = (req, res) => {
   res.json("login");
-  // check if user exists , if not send error
+  // check if user exists , if not send error.
 
   // check if user exists, if so check details
 };
