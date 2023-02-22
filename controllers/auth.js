@@ -1,7 +1,7 @@
 const login = (req, res) => {
   res.json("login");
   // check if user exists , if not send error.
-
+  q = "SELECT FROM ";
   // check if user exists, if so check details
 };
 
