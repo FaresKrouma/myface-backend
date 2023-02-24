@@ -3,14 +3,6 @@ const express = require("express");
 const app = express();
 const PORT = 3001;
 
-const mysql = require("mysql");
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "farzan1256**",
-  table: "myface",
-});
-
 // Routes
 const authRoute = require("./routes/auth.js");
 const usersRoute = require("./routes/users.js");
@@ -20,6 +12,8 @@ const likesRoute = require("./routes/likes.js");
 const storiesRoute = require("./routes/stories.js");
 
 // Middlewares
+app.use(express.json());
+
 app.use("/auth", authRoute);
 app.use("/users", usersRoute);
 app.use("/posts", postsRoute);
