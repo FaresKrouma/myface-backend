@@ -1,5 +1,6 @@
 const db = require("../connect.js");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const register = (req, res) => {
   // check if user exists
@@ -33,18 +34,25 @@ const register = (req, res) => {
 };
 
 const login = (req, res) => {
+  // Check if User Exists:
   const q = "SELECT * FROM myface.users WHERE `email` = ?;";
-
   db.query(q, [req.body.email], (err, data) => {
     if (err) return res.status(500).json(err);
     if (data.length === 0) return res.status(409).json("No User Found. :(");
+    //assuming user found , checking password:
     const checkPassword = bcrypt.compareSync(
       req.body.password,
       data[0].password
     );
-    if (!checkPassword) return res.json("wrong password or Username.");
-
-    return res.json(data);
+    if (!checkPassword)
+      return res.status(400).json("wrong password or Username.");
+    // assuming password is correct , logging in and storing cookie containing user id:
+    const { password, ...others } = data[0];
+    const token = jwt.sign({ id: data[0].id }, "secretKey");
+    return res
+      .status(200)
+      .cookie("accessToken", token, { httpOnly: "true" })
+      .json(others);
   });
 };
 
